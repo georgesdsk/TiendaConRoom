@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context=".FragmentProductDetails">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/common_padding_deffault">
+
+
+        <TextView
+            android:id="@+id/tituloNombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/common_padding_deffault"
+            android:text="@string/nombreProducto"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tvNombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginStart="@dimen/common_padding_deffault"
+            android:text="@string/nombreProducto"
+            app:layout_constraintBottom_toBottomOf="@+id/tituloNombre"
+            app:layout_constraintStart_toEndOf="@id/tituloNombre" />
+
+
+        <TextView
+            android:id="@+id/tituloPrecio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/common_padding_deffault"
+            android:layout_marginStart="32dp"
+            android:text="@string/precioProducto"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tituloNombre" />
+
+        <TextView
+            android:id="@+id/tvPrecio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_padding_deffault"
+            android:text="@string/nombreProducto"
+            app:layout_constraintStart_toEndOf="@+id/tituloPrecio"
+            app:layout_constraintTop_toTopOf="@+id/tituloPrecio" />
+
+        <TextView
+            android:id="@+id/tituloPrecioUnitario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/common_padding_deffault"
+            android:text="@string/precioUnitario"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tituloPrecio" />
+
+        <TextView
+            android:id="@+id/tvPrecioUnitario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_padding_deffault"
+            android:text="@string/nombreProducto"
+            app:layout_constraintStart_toEndOf="@+id/tituloPrecioUnitario"
+            app:layout_constraintTop_toTopOf="@+id/tituloPrecioUnitario" />
+
+
+        <TextView
+            android:id="@+id/tituloCategoria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/common_padding_deffault"
+            android:text="@string/Categoria"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tituloPrecioUnitario" />
+
+        <TextView
+            android:id="@+id/tvCategoria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/common_padding_deffault"
+            android:text="@string/nombreProducto"
+            app:layout_constraintStart_toEndOf="@+id/tituloCategoria"
+            app:layout_constraintTop_toTopOf="@+id/tituloCategoria" />
+
+        <ImageView
+            android:id="@+id/imagen"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@mipmap/ic_launcher_round"
+            app:layout_constraintBottom_toBottomOf="@+id/tvPrecioUnitario"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvNombre" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/botonAnhadirCesta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/common_padding_deffault"
+            android:text="@string/anhadirCesta"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvCategoria" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.core.widget.NestedScrollView>

@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Stores</string>
+    <string name="title_dashboard">CAsita</string>
+    <string name="title_home">CAsita</string>
+    <string name="save">save</string>
+    <string name="borrarProducto">Desea quitar este producto de la cesta</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">cancel</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hint_nombre">Nombre del producto</string>
+    <string name="helper_requerido">Requerido</string>
+    <string name="telefono">Telefono</string>
+    <string name="cesta">Cesta</string>
+    <string name="menu_send">Send</string>
+    <string name="cesta_enviada">Cesta enviada correctamente</string>
+    <string name="title_notifications">cositas</string>
+    <string name="dialog_delete_title">Desea borrar el siguiente producto</string>
+    <string name="dialog_delete_confirm">Confirmar</string>
+    <string name="product_id">idproducto</string>
+    <string name="nombreProducto">Nombre:</string>
+    <string name="precioProducto">Precio:</string>
+    <string name="precioUnitario">Precio Kg/L</string>
+    <string name="Categoria">Categoria</string>
+    <string name="anhadirCesta">Añadir a la cesta</string>
+    <string name="idCesta">idCesta</string>
+    <string name="detallesProducto">Product Details</string>
+    <string name="totalCesta">"Total: "</string>
+</resources>
