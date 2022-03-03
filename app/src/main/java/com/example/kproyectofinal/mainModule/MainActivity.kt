@@ -33,26 +33,10 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         setContentView(mBinding.root)
 
         productDao = TiendaBBDD.getInsance(this).productDao
-        getAllProducts()
 
         mBinding.fab.setOnClickListener { launchEditFragment() }
-        setupCesta()
+
         setupRecyclerView()
-
-    }
-
-    private fun setupCesta() {
-
-        val args = Bundle()
-
-
-        val cesta = productDao.getCesta()
-
-
-
-        Toast.makeText(this,cesta.toString(), Toast.LENGTH_SHORT)
-            .show() // muestra una tostada
-
 
     }
 
@@ -106,7 +90,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
 
     private fun getAllProducts() {
-         productDao = TiendaBBDD.getInsance(this).productDao
+        // val productDao = TiendaBBDD.getInsance(this).productDao
         doAsync {
             val products = productDao.getAllProducts()
             uiThread {
