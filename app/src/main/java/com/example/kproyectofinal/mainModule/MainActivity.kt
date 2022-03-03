@@ -5,16 +5,22 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.liveData
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.kproyectofinal.BaseDatos.ProductDao
 import com.example.kproyectofinal.BaseDatos.TiendaBBDD
+import com.example.kproyectofinal.Entidades.Cesta
 import com.example.kproyectofinal.Entidades.ProductEntity
 import com.example.kproyectofinal.FragmentProductDetails
 import com.example.kproyectofinal.R
 import com.example.kproyectofinal.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
+import kotlin.properties.Delegates
 
 
 class MainActivity : AppCompatActivity(), OnClickListener {
@@ -22,10 +28,11 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     private lateinit var mBinding: ActivityMainBinding
     private lateinit var mAdapter: ProductAdapter
     private lateinit var mGridLayout: GridLayoutManager
-
     private lateinit var mMainViewModel: MainViewModel
-
     private lateinit var productDao: ProductDao
+
+    private var mCesta :Int? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,12 +40,52 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         setContentView(mBinding.root)
 
         productDao = TiendaBBDD.getInsance(this).productDao
+        getAllProducts()
+
+        //insertarCesta()
 
         mBinding.fab.setOnClickListener { launchEditFragment() }
+        //insertarProductos()
 
+
+     //   setupCesta()
         setupRecyclerView()
 
+        getCesta()
+
+//        var idCesta: Int? =null
+//        lifecycleScope.launch {
+//            idCesta =  productDao.getCesta().idCesta
+//
+//        }
+
     }
+
+    private fun setupCesta() {
+
+        lifecycleScope.launch {
+            productDao.addCesta(Cesta())
+        }
+
+
+
+//            .show() // muestra una tostada
+
+    }
+
+//        //ViewmodelScope.launch
+//
+//        val cesta: LiveData<Cesta> = productDao.getCesta()
+//
+//        var cestaId: Int?=null
+//       cesta.observe(this){cestaX->
+//          cestaId = cestaX.idCesta
+//            Toast.makeText(this,cestaX.idCesta, Toast.LENGTH_SHORT)
+//               .show() // muestra una tostada
+//       }
+//        Toast.makeText(this, cesta.value!!.idCesta, Toast.LENGTH_SHORT)
+//            .show() // muestra una tostada
+//    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_save, menu)
@@ -90,7 +137,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
 
     private fun getAllProducts() {
-        // val productDao = TiendaBBDD.getInsance(this).productDao
+         productDao = TiendaBBDD.getInsance(this).productDao
         doAsync {
             val products = productDao.getAllProducts()
             uiThread {
@@ -111,7 +158,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         launchEditFragment(args)
 
 
-        Toast.makeText(this,args.getLong(getString(R.string.idCesta)).toString(), Toast.LENGTH_SHORT)
+        Toast.makeText(this,mCesta!!., Toast.LENGTH_SHORT)
             .show() // muestra una tostada
 
     }
@@ -126,8 +173,6 @@ class MainActivity : AppCompatActivity(), OnClickListener {
                 mAdapter.update(productEntity)
             }
         }
-
-
     }
 
 
@@ -152,8 +197,41 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         }
     }
 
+     fun insertarCesta() {
 
-/*
+        doAsync {
+            productDao.addCesta(Cesta())
+        }
+    }
+
+
+
+     fun getCesta() {
+
+         var cesta: Cesta?=null
+
+        doAsync {
+            cesta = productDao.getCesta()
+
+            uiThread {
+                mCesta = cesta!!.idCesta
+                Toast.makeText(it,  mCesta.toString(), Toast.LENGTH_SHORT)
+             .show() // muestra una tostada
+
+
+            }
+        }
+
+
+
+
+    }
+
+
+
+
+
+
 
     private fun insertarProductos() {
         val productos = listOf(
@@ -208,7 +286,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         }
     }
 
-*/
+
 
 
 

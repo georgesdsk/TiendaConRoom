@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.kproyectofinal.Entidades.Cesta
 import com.example.kproyectofinal.Entidades.ProductEntity
 import com.example.kproyectofinal.R
 import com.example.kproyectofinal.databinding.ItemProductBinding
@@ -77,6 +78,12 @@ class ProductAdapter(
             productList.removeAt(index)
             notifyItemRemoved(index)
         }
+    }
+
+    fun setCesta(cesta: Cesta) {
+
+        add(ProductEntity(name = cesta.idCesta.toString()))
+
     }
 
 

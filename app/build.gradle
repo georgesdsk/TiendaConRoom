@@ -38,6 +38,8 @@ android {
 }
 
 ext.anko_version="0.10.8"
+def lifecycle_version = "2.4.0"
+
 
 dependencies {
 
@@ -69,7 +71,8 @@ dependencies {
     // Coroutine Lifecycle Scopes
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.1"
-
+//LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
 
 
 

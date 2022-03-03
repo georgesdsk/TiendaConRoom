@@ -27,14 +27,14 @@ interface ProductDao {
       fun getProductos(id: Int): LiveData<MutableList<CestaConProductos>>
 
       @Query("SELECT * FROM Cesta WHERE estadoCesta = 0") // tiene que devolver solo uno
-      fun getCesta(): Cesta
+       fun getCesta(): Cesta
 
     @Query("SELECT * FROM ProductEntity WHERE id =:id") // espero que   funcione el true
     fun getProductbyId(id: Int):ProductEntity
 
 
     @Insert()
-      fun addCesta(cesta: Cesta): Long // para que en cuanto se anhada tengamos su id
+     fun addCesta(cesta: Cesta): Long // para que en cuanto se anhada tengamos su id
 
     @Insert()
       fun insertarProductoCesta(productoCestaReferencia: ProductCestaReferencia) // hacer que se actualice en la pantalla
