@@ -53,7 +53,7 @@ class ProductAdapter(
     override fun getItemCount(): Int = productList.size;
 
 
-    fun setStores(products: MutableList<ProductEntity>) {
+    fun setProducts(products: MutableList<ProductEntity>) {
         productList = products
         notifyDataSetChanged();
     }
@@ -92,7 +92,7 @@ class ProductAdapter(
 
         fun setListener(productEntity: ProductEntity) {
             with(binding.root) {
-                setOnClickListener { listener.onClick(productEntity.id) } //pasarle un metodo?
+                setOnClickListener { listener.onClick(productEntity) } //pasarle un metodo?
                 setOnLongClickListener {
                     listener.onDeleteProduct(productEntity)
                     true

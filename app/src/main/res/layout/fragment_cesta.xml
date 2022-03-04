@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
-    tools:context=".ui.FragmentCesta">
+    tools:context=".Fragments.Cesta.FragmentCesta">
 
 
     <androidx.recyclerview.widget.RecyclerView

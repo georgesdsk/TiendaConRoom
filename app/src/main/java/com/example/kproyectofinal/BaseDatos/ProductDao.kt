@@ -1,6 +1,7 @@
 package com.example.kproyectofinal.BaseDatos
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.room.*
 import com.example.kproyectofinal.Entidades.Cesta
 import com.example.kproyectofinal.Entidades.ProductEntity
@@ -8,10 +9,10 @@ import com.example.kproyectofinal.Entidades.ProductEntity
 @Dao
 interface ProductDao {
     @Query("SELECT * FROM ProductEntity")
-       fun getAllProducts():MutableList<ProductEntity>
+       fun getAllProducts():LiveData<MutableList<ProductEntity>>
 
     @Insert()
-      fun addProduct(product: ProductEntity)
+    suspend fun addProduct(product: ProductEntity)
 
     @Update()
       fun update(product: ProductEntity)
@@ -27,14 +28,14 @@ interface ProductDao {
       fun getProductos(id: Int): LiveData<MutableList<CestaConProductos>>
 
       @Query("SELECT * FROM Cesta WHERE estadoCesta = 0") // tiene que devolver solo uno
-       fun getCesta(): Cesta
+     suspend  fun getCesta(): Cesta
 
     @Query("SELECT * FROM ProductEntity WHERE id =:id") // espero que   funcione el true
     fun getProductbyId(id: Int):ProductEntity
 
 
     @Insert()
-     fun addCesta(cesta: Cesta): Long // para que en cuanto se anhada tengamos su id
+    suspend fun addCesta(cesta: Cesta): Long // para que en cuanto se anhada tengamos su id
 
     @Insert()
       fun insertarProductoCesta(productoCestaReferencia: ProductCestaReferencia) // hacer que se actualice en la pantalla

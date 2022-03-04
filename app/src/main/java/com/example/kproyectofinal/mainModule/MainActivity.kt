@@ -5,22 +5,21 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.liveData
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
+import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.kproyectofinal.BaseDatos.ProductDao
 import com.example.kproyectofinal.BaseDatos.TiendaBBDD
 import com.example.kproyectofinal.Entidades.Cesta
 import com.example.kproyectofinal.Entidades.ProductEntity
-import com.example.kproyectofinal.FragmentProductDetails
+import com.example.kproyectofinal.Fragments.ProductDetails.FragmentProductDetails
+import com.example.kproyectofinal.Fragments.ProductDetails.ProductDetailsViewModel
 import com.example.kproyectofinal.R
 import com.example.kproyectofinal.databinding.ActivityMainBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.launch
-import kotlin.properties.Delegates
 
 
 class MainActivity : AppCompatActivity(), OnClickListener {
@@ -28,69 +27,67 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     private lateinit var mBinding: ActivityMainBinding
     private lateinit var mAdapter: ProductAdapter
     private lateinit var mGridLayout: GridLayoutManager
+
     private lateinit var mMainViewModel: MainViewModel
+    private lateinit var mProductDetailsViewModel: ProductDetailsViewModel
+
     private lateinit var productDao: ProductDao
-
-    private var mCesta :Int? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-
         productDao = TiendaBBDD.getInsance(this).productDao
-        getAllProducts()
+        mBinding.fab.setOnClickListener { launchEditFragment() }
 
+
+        setupRecyclerView()
+        setupViewModel()
         //insertarCesta()
 
-        mBinding.fab.setOnClickListener { launchEditFragment() }
-        //insertarProductos()
-
-
-     //   setupCesta()
-        setupRecyclerView()
-
-        getCesta()
-
-//        var idCesta: Int? =null
-//        lifecycleScope.launch {
-//            idCesta =  productDao.getCesta().idCesta
-//
-//        }
 
     }
 
-    private fun setupCesta() {
+    private fun insertarCesta() {
+        mMainViewModel.insertarCesta(Cesta())
+    }
 
-        lifecycleScope.launch {
-            productDao.addCesta(Cesta())
+    private fun setupViewModel() {
+        mMainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        mMainViewModel.getProducts().observe(this) { products ->
+            mAdapter.setProducts(products)
         }
 
+        mMainViewModel.isLoading.observe(this, Observer {
+            mBinding.progressBar.isVisible = it
+        })
 
+        mMainViewModel.cestaActual.observe(this, Observer {
+            Snackbar.make(
+                mBinding.root,
+                it.idCesta.toString(),
+                Snackbar.LENGTH_SHORT
+            ).show()
 
-//            .show() // muestra una tostada
+        })
 
+        /* mMainViewModel.getCestaActual().observe(this){ cesta->
+             Snackbar.make(
+                 mBinding.root,
+                 cesta.idCesta,
+                 Snackbar.LENGTH_SHORT
+             )
+         }*/
     }
-
-//        //ViewmodelScope.launch
-//
-//        val cesta: LiveData<Cesta> = productDao.getCesta()
-//
-//        var cestaId: Int?=null
-//       cesta.observe(this){cestaX->
-//          cestaId = cestaX.idCesta
-//            Toast.makeText(this,cestaX.idCesta, Toast.LENGTH_SHORT)
-//               .show() // muestra una tostada
-//       }
-//        Toast.makeText(this, cesta.value!!.idCesta, Toast.LENGTH_SHORT)
-//            .show() // muestra una tostada
-//    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_save, menu)
         return true
     }
+
+
+    //la barra superior
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.action_send -> {
             Snackbar.make(
@@ -104,10 +101,11 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         else -> super.onOptionsItemSelected(item)
     }
 
-    private fun launchEditFragment(args: Bundle? = null) {
+    private fun launchEditFragment(productEntity: ProductEntity) {
 
-        val fragment = FragmentProductDetails()
-        if (args != null) fragment.arguments = args
+
+
+        val fragment = FragmentProductDetails(productEntity);
 
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
@@ -120,12 +118,11 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     }
 
 
-
     private fun setupRecyclerView() {
 
         mAdapter = ProductAdapter(mutableListOf(), this)
         mGridLayout = GridLayoutManager(this, 2)
-        //getAllProducts()
+
 
         mBinding.recyclerView.apply {
             setHasFixedSize(true)
@@ -135,103 +132,32 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
     }
 
-
-    private fun getAllProducts() {
-         productDao = TiendaBBDD.getInsance(this).productDao
-        doAsync {
-            val products = productDao.getAllProducts()
-            uiThread {
-                mAdapter.setStores(products)
-            }
-        }
-}
-
-
-
     // lo ideal seria que este producto se guarde en el vm y se pase al otro fragment
-    override fun onClick(idProduct: Int) {
-        val args = Bundle()
-        args.putInt(
-            getString(R.string.product_id),
-            idProduct
-        ) // preguntar si el producto ya esta en la cesta actual
-        launchEditFragment(args)
+    override fun onClick(productEntity: ProductEntity) {
 
-
-        Toast.makeText(this,mCesta!!., Toast.LENGTH_SHORT)
-            .show() // muestra una tostada
+        launchEditFragment(productEntity)
 
     }
-
 
     override fun onCestaProduct(productEntity: ProductEntity) {
-        productEntity.isFavorite = !productEntity.isFavorite;
-
-        doAsync {
-            productDao.update(productEntity) //productDao()
-            uiThread {
-                mAdapter.update(productEntity)
-            }
-        }
+        TODO("Not yet implemented")
     }
 
-
-    /*todo avisar de que se va a borrar un producto, cuando se seleccione uno, que salga la vista de seleccion:
-        -en todos los objetos de la lista abilitar el checkbox
-        -a la hora de borrar :
-            recorrer todo el listado y borrar los seleccionados
-            crear un nuevo listado de seleccionados, problema de no saber cuando se quita un objeto de ese listado
-
-    * */
-
-
+/* todo anhadirlo al fragment de la cesta
 
     override fun onDeleteProduct(productEntity: ProductEntity) {
-
-        doAsync {
-            productDao.delete(productEntity)
-
-            uiThread {
-                mAdapter.delete(productEntity)
-            }
+            MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.dialog_delete_title)
+                .setPositiveButton(R.string.dialog_delete_confirm) { _, _ ->
+                    mMainViewModel.deleteStore(storeEntity)
+                }
+                .setNegativeButton(R.string.dialog_delete_cancel, null)
+                .show()
         }
-    }
-
-     fun insertarCesta() {
-
-        doAsync {
-            productDao.addCesta(Cesta())
-        }
-    }
-
-
-
-     fun getCesta() {
-
-         var cesta: Cesta?=null
-
-        doAsync {
-            cesta = productDao.getCesta()
-
-            uiThread {
-                mCesta = cesta!!.idCesta
-                Toast.makeText(it,  mCesta.toString(), Toast.LENGTH_SHORT)
-             .show() // muestra una tostada
-
-
-            }
-        }
-
-
-
 
     }
 
-
-
-
-
-
+*/
 
     private fun insertarProductos() {
         val productos = listOf(
@@ -280,14 +206,73 @@ class MainActivity : AppCompatActivity(), OnClickListener {
                 priceKgL = 200.0, unitPrice = 200.0, quantity = 1
             ),
         )
-        var bbdd = TiendaBBDD.getInsance(this)
-        doAsync {
-            productos.forEach { bbdd.productDao.addProduct(it) }
-        }
+        productos.forEach { x -> mMainViewModel.insertarProducto(x) }
     }
 
 
+/* todo
+    private fun getAllProducts() {
+        // val productDao = TiendaBBDD.getInsance(this).productDao
+        doAsync {
+            val products = productDao.getAllProducts()
+            uiThread {
+                mAdapter.setStores(products)
+            }
+        }
+}
+*/
 
+/*
+    override fun onCestaProduct(productEntity: ProductEntity) {
+        productEntity.isFavorite = !productEntity.isFavorite;
+
+        doAsync {
+            appBbDD.database.productDao.update(productEntity) //productDao()
+            uiThread {
+                mAdapter.update(productEntity)
+            }
+        }
+
+
+    }
+*/
+
+    /*todo avisar de que se va a borrar un producto, cuando se seleccione uno, que salga la vista de seleccion:
+        -en todos los objetos de la lista abilitar el checkbox
+        -a la hora de borrar :
+            recorrer todo el listado y borrar los seleccionados
+            crear un nuevo listado de seleccionados, problema de no saber cuando se quita un objeto de ese listado
+
+    * */
+
+
+/*
+    override fun onDeleteProduct(productEntity: ProductEntity) {
+
+        doAsync {
+            productDao.delete(productEntity)
+
+            uiThread {
+                mAdapter.delete(productEntity)
+            }
+        }
+    }
+*/
+
+
+    //insertarProductos()
+/*
+        mBinding.btnSave.setOnClickListener {
+            val product = ProductEntity(
+                name = mBinding.etName.text.toString().trim()) // para quitar los espacio blanco
+
+            Thread {dfdfs
+                ProductAplication.database.productDao().addProduct(product)
+            }.start()
+
+            mAdapter.add(product)
+        }
+*/
 
 
 }

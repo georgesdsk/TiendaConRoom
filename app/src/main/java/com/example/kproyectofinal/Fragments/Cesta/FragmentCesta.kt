@@ -1,4 +1,4 @@
-package com.example.kproyectofinal.ui
+package com.example.kproyectofinal.Fragments.Cesta
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.kproyectofinal.BaseDatos.ProductDao
-import com.example.kproyectofinal.mainModule.MainActivity
 import com.example.kproyectofinal.databinding.FragmentCestaBinding
+import com.example.kproyectofinal.mainModule.MainActivity
 import com.google.android.material.bottomappbar.BottomAppBar
 
 

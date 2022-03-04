@@ -1,4 +1,4 @@
-package com.example.kproyectofinal
+package com.example.kproyectofinal.Fragments.ProductDetails
 
 import android.os.Bundle
 import android.view.*
@@ -10,6 +10,7 @@ import com.example.kproyectofinal.BaseDatos.ProductCestaReferencia
 import com.example.kproyectofinal.BaseDatos.ProductDao
 import com.example.kproyectofinal.BaseDatos.TiendaBBDD
 import com.example.kproyectofinal.Entidades.ProductEntity
+import com.example.kproyectofinal.R
 import com.example.kproyectofinal.databinding.FragmentProductDetailsBinding
 import com.example.kproyectofinal.mainModule.MainActivity
 
@@ -35,19 +36,6 @@ class FragmentProductDetails : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val idProduct = arguments?.getInt(getString(R.string.product_id), 0)
-        val mIdCesta = arguments?.getLong(getString(R.string.idCesta), 0)
-
-        Toast.makeText(activity,mIdCesta.toString() , Toast.LENGTH_SHORT)
-            .show() // muestra una tostada
-
-
-        if (idProduct != null && idProduct != 0) {
-            //getProduct(idProduct)
-           // Toast.makeText(activity, idProduct.toString(), Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(activity, idProduct.toString(), Toast.LENGTH_SHORT).show()
-        }
 
         mBinding.botonAnhadirCesta.setOnClickListener {
             insertProductCesta(mIdCesta, idProduct)
