@@ -1,4 +1,4 @@
-package com.example.kproyectofinal.mainModule
+package com.example.kproyectofinal.Fragments.Cesta
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -12,14 +12,13 @@ import com.example.kproyectofinal.Entidades.ProductEntity
 import com.example.kproyectofinal.R
 import com.example.kproyectofinal.databinding.ItemProductBinding
 
-class ProductAdapter(
+class CestaProductAdapter(
     private var productList: MutableList<ProductEntity>,
-    private var listener: OnClickListener
+    private var listener: CestaOnClickListener
 ) :
-     RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
+     RecyclerView.Adapter<CestaProductAdapter.ViewHolder>() {
 
     private lateinit var mContext: Context
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         mContext = parent.getContext()
@@ -92,14 +91,13 @@ class ProductAdapter(
 
         fun setListener(productEntity: ProductEntity) {
             with(binding.root) {
-                setOnClickListener { listener.onClick(productEntity) } //pasarle un metodo?
+                setOnClickListener {
+                    //listener.onClick(productEntity)
+                } //pasarle un metodo?
                 setOnLongClickListener {
-                    //listener.onDeleteProduct(productEntity)
+                    listener.onDeleteProductFromCesta(productEntity)
                     true
                 }
-            }
-            binding.cbFavorite.setOnClickListener {
-                listener.onCestaProduct(productEntity)
             }
         }
     }

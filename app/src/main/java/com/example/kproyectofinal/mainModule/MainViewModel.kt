@@ -37,13 +37,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getCesta() {
         viewModelScope.launch { // si no hay ninguna cesta que te devuelve?
-            val cesta: Cesta = bbdd.getCesta()
+            var cesta: Cesta = bbdd.getCesta()
             if (cesta == null) {
-                insertarCesta(Cesta())
-            } else {
-                cestaActual.postValue(cesta)
+                cesta = Cesta()// mirar el id
+                insertarCesta(cesta)
             }
+            cestaActual.postValue(cesta)
         }
+
     }
 
     //he cambiado el Job

@@ -26,4 +26,7 @@
     <string name="idCesta">idCesta</string>
     <string name="detallesProducto">Product Details</string>
     <string name="totalCesta">"Total: "</string>
+    <string name="producte_exist">El producto ya esta en la lista</string>
+    <string name="product_deleted">El producto ha sido retirado</string>
+    <string name="productos">Productos</string>
 </resources>

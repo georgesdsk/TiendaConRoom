@@ -1,39 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
-    tools:context=".Fragments.Cesta.FragmentCesta">
+    tools:context=".Fragments.Cesta.FragmentCesta"
+    android:background="@color/cardview_light_background"
+    >
 
 
     <androidx.recyclerview.widget.RecyclerView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/coordinator"
         android:id="@+id/recyclerViewCesta"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="@dimen/common_padding_deffault"
         android:paddingBottom="50dp"
         tools:listitem="@layout/item_product_cesta" />
 
 
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottom_app_bar"
-        style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:fabAnimationMode="scale"
-        app:hideOnScroll="true"
-         />
+        android:id="@+id/coordinator"
+        android:layout_height="match_parent"
+        android:layout_marginTop="40dp"
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_send_mail"
-        app:layout_anchor="@id/bottom_app_bar" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottom_app_bar"
+            style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:fabAnimationMode="scale"
+            app:hideOnScroll="true"
+            />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_send_mail"
+            app:layout_anchor="@id/bottom_app_bar" />
+
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 
     <TextView
         android:id="@+id/tituloPrecio"
@@ -43,18 +62,20 @@
         android:layout_margin="@dimen/common_padding_deffault"
         android:text="@string/totalCesta"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvTotalCompra" />
 
     <TextView
         android:id="@+id/tvTotalCompra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginLeft="88dp"
-        android:layout_marginBottom="@dimen/common_padding_deffault"
+        android:layout_margin="@dimen/common_padding_deffault"
         android:text="@string/totalCesta"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

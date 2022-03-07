@@ -9,46 +9,46 @@ import com.example.kproyectofinal.Entidades.ProductEntity
 @Dao
 interface ProductDao {
     @Query("SELECT * FROM ProductEntity")
-       fun getAllProducts():LiveData<MutableList<ProductEntity>>
+    fun getAllProducts(): LiveData<MutableList<ProductEntity>>
 
     @Insert()
     suspend fun addProduct(product: ProductEntity)
 
     @Update()
-      fun update(product: ProductEntity)
+    fun update(product: ProductEntity)
 
     @Delete()
-      fun delete(product: ProductEntity)
+    fun delete(product: ProductEntity)
 
     @Update
-     fun actualizarCesta(cesta: Cesta)
+    fun actualizarCesta(cesta: Cesta)
 
+// se podria mejorar
+    @Query("SELECT * FROM ProductCestaReferencia" +
+            " INNER JOIN ProductEntity ON ProductEntity.id = ProductCestaReferencia.id" +
+            " WHERE idCesta = :id ") // solo tendria los ids
+    fun getProductosCesta(id: Int): LiveData<MutableList<ProductEntity>>
 
-    @Query("SELECT * FROM Cesta WHERE idCesta = :id") // espero que   funcione el true
-      fun getProductos(id: Int): LiveData<MutableList<CestaConProductos>>
-
-      @Query("SELECT * FROM Cesta WHERE estadoCesta = 0") // tiene que devolver solo uno
-     suspend  fun getCesta(): Cesta
+    @Query("SELECT * FROM Cesta WHERE estadoCesta = 0") // tiene que devolver solo uno
+    suspend fun getCesta(): Cesta
 
     @Query("SELECT * FROM ProductEntity WHERE id =:id") // espero que   funcione el true
-    fun getProductbyId(id: Int):ProductEntity
-
+    fun getProductbyId(id: Int): ProductEntity
 
     @Insert()
     suspend fun addCesta(cesta: Cesta): Long // para que en cuanto se anhada tengamos su id
 
     @Insert()
-      fun insertarProductoCesta(productoCestaReferencia: ProductCestaReferencia) // hacer que se actualice en la pantalla
+    suspend fun insertarProductoCesta(productoCestaReferencia: ProductCestaReferencia) // hacer que se actualice en la pantalla
 
     @Delete()
-      fun borrarProductoCesta(productoCestaReferencia: ProductCestaReferencia)
+    fun borrarProductoCesta(productoCestaReferencia: ProductCestaReferencia)
 
     @Delete()
-      fun borrarCesta(cesta: Cesta)
+    fun borrarCesta(cesta: Cesta)
 
-
-
-
+    @Query("SELECT * FROM ProductCestaReferencia WHERE idCesta = :idCesta AND id = :idProducto")
+    suspend fun productoEnCesta(idCesta: Int, idProducto: Int): ProductCestaReferencia
 
 
 }
