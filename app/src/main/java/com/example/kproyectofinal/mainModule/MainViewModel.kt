@@ -25,6 +25,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val bbdd = TiendaBBDD.getInsance(context).productDao
     val isLoading = MutableLiveData<Boolean>()
     val cestaActual = MutableLiveData<Cesta>()
+    val fragment = MutableLiveData<String>()
 
     private val products: LiveData<MutableList<ProductEntity>> = liveData {
         isLoading.postValue(true)
@@ -32,6 +33,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         emitSource(productLiveData.map { products -> products.sortedBy { it.name }.toMutableList() }
         )
         isLoading.postValue(false)
+    }
+
+    fun setCesta(cesta: Cesta){
+        cestaActual.postValue(cesta)
     }
 
 
@@ -44,18 +49,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
             cestaActual.postValue(cesta)
         }
-
     }
 
-    //he cambiado el Job
-    fun newCesta(cestaAntigua: Cesta, cestaNueva: Cesta) {
-        viewModelScope.launch {
-            bbdd.actualizarCesta(cestaAntigua) // ponerle el true de antes, se podria hacer todo desde la badat
-            val cesta =
-                bbdd.addCesta(cestaNueva) // o reconstruir a partir del id , o buscarlo de nuevo
-            cestaActual.postValue(Cesta(idCesta = cesta.toInt(), false))
-        }
-    }
+
+
+
 
     fun insertarCesta(cestaNueva: Cesta) {
         viewModelScope.launch {
@@ -72,6 +70,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getProducts(): LiveData<MutableList<ProductEntity>> {
         return products
+    }
+
+    fun setFragment(s: String) {
+        fragment.postValue(s)
+    }
+
+    fun getFragment(): String{
+        return fragment.value!!
+
     }
 
 /*

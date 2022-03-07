@@ -1,13 +1,14 @@
 package com.example.kproyectofinal.mainModule
 
-import androidx.appcompat.app.AppCompatActivity
+import android.app.PendingIntent.getActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.kproyectofinal.BaseDatos.ProductDao
 import com.example.kproyectofinal.BaseDatos.TiendaBBDD
@@ -40,21 +41,15 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
         productDao = TiendaBBDD.getInsance(this).productDao
-/*
-        mBinding.fab.setOnClickListener { launchEditFragment() }*/
 
-        setupRecyclerView()
         setupViewModel()
-
-       /* insertarProductos()
-        insertarCesta()*/
+        setupRecyclerView()
+        /* insertarProductos()
+         insertarCesta()*/
 
     }
 
-    override fun onResume() {
-        this.supportActionBar?.title = getString(R.string.productos)
-        super.onResume()
-    }
+
 
     private fun insertarCesta() {
         mMainViewModel.insertarCesta(Cesta())
@@ -65,25 +60,20 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         mMainViewModel.getProducts().observe(this) { products ->
             mAdapter.setProducts(products)
         }
-
         mMainViewModel.isLoading.observe(this, Observer {
             mBinding.progressBar.isVisible = it
         })
-
         mMainViewModel.getCesta()
+        mMainViewModel.cestaActual.observe(this, {})
+        mMainViewModel.setFragment("Inicio")
 
-        mMainViewModel.cestaActual.observe(this, Observer {
-            Snackbar.make(
-                mBinding.root,
-                it.idCesta.toString(),
-                Snackbar.LENGTH_SHORT
-            ).show()
-        })
+        mProductDetailsViewModel = ViewModelProvider(this)[ProductDetailsViewModel::class.java]
+        mCestaViewModel = ViewModelProvider(this)[CestaViewModel::class.java]
 
+        mCestaViewModel.cestaActual.observe(this){cesta->
+            mMainViewModel.setCesta(cesta)
 
-
-    mProductDetailsViewModel= ViewModelProvider(this)[ProductDetailsViewModel::class.java]
-    mCestaViewModel = ViewModelProvider(this)[CestaViewModel::class.java]
+        }
 
     }
 
@@ -96,51 +86,47 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     //la barra superior
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         android.R.id.home -> {
+            mMainViewModel.setFragment("Inicio")
             this.supportActionBar?.title = getString(R.string.productos)
             this.onBackPressed()
             true
         }
         R.id.action_send -> {
-            launchCestaFragment()
-            Snackbar.make(
-                mBinding.root,
-                getString(R.string.cesta_enviada),
-                Snackbar.LENGTH_SHORT
-            )
-                .show()
+            if (!mMainViewModel.getFragment().equals("cesta")) { // para que no se pueda entrar desde cesta
+                launchCestaFragment()
+            }
             true
         }
         else -> super.onOptionsItemSelected(item)
     }
 
-    private fun launchProductFragment(productEntity: ProductEntity = ProductEntity()) {
 
+    private fun launchProductFragment(productEntity: ProductEntity = ProductEntity()) {
+        mMainViewModel.setFragment("product")
         mProductDetailsViewModel.setProdctoActual(productEntity)
         mProductDetailsViewModel.setCestaActual(mMainViewModel.cestaActual.value!!)
 
         val fragment = FragmentProductDetails();
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.addToBackStack(null) // todo se anade para el paso atras
+        fragmentTransaction.addToBackStack("producto") // todo se anade para el paso atras
         fragmentTransaction.add(R.id.containerMain, fragment)
         fragmentTransaction.commit()
-        mBinding.fab.hide()
     }
 
     private fun launchCestaFragment() {
-
+        mMainViewModel.setFragment("cesta")
         mCestaViewModel.setCestaActual(mMainViewModel.cestaActual.value!!)
         val fragment = FragmentCesta()
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.addToBackStack(null) // todo se anade para el paso atras
+        fragmentTransaction.addToBackStack("cesta") // todo se anade para el paso atras
         fragmentTransaction.add(R.id.containerMain, fragment)
         fragmentTransaction.commit()
         mBinding.fab.hide()
     }
 
     private fun setupRecyclerView() {
-
         mAdapter = ProductAdapter(mutableListOf(), this)
         mGridLayout = GridLayoutManager(this, 2)
 
@@ -158,25 +144,13 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     }
 
     override fun onCestaProduct(productEntity: ProductEntity) {
-        TODO("Not yet implemented")
+        Snackbar.make(
+            mBinding.root,
+            getString(R.string.todo),
+            Snackbar.LENGTH_SHORT
+        )
+            .show()
     }
-
-
-/* todo anhadirlo al fragment de la cesta
-
-    override fun onDeleteProduct(productEntity: ProductEntity) {
-            MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.dialog_delete_title)
-                .setPositiveButton(R.string.dialog_delete_confirm) { _, _ ->
-                    mMainViewModel.deleteStore(storeEntity)
-                }
-                .setNegativeButton(R.string.dialog_delete_cancel, null)
-                .show()
-        }
-
-    }
-
-*/
 
     private fun insertarProductos() {
         val productos = listOf(
@@ -229,17 +203,6 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     }
 
 
-/* todo
-    private fun getAllProducts() {
-        // val productDao = TiendaBBDD.getInsance(this).productDao
-        doAsync {
-            val products = productDao.getAllProducts()
-            uiThread {
-                mAdapter.setStores(products)
-            }
-        }
-}
-*/
 
 /*
     override fun onCestaProduct(productEntity: ProductEntity) {

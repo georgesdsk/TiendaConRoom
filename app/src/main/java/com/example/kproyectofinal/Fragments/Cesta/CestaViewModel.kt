@@ -20,6 +20,10 @@ class CestaViewModel(application: Application) : AndroidViewModel(application) {
     val isLoading = MutableLiveData<Boolean>()
     val cestaActual = MutableLiveData<Cesta>()
     val totalCompra = MutableLiveData<Double>()
+    val products2 = MutableLiveData<List<ProductEntity>>()
+
+
+
 
     private val products: LiveData<MutableList<ProductEntity>> = liveData {
         isLoading.postValue(true)
@@ -29,32 +33,36 @@ class CestaViewModel(application: Application) : AndroidViewModel(application) {
         isLoading.postValue(false)
     }
 
+    fun actualizarProductos(){
+        
+
+    }
+
+
+
     //he cambiado el Job
     fun newCesta(cestaAntigua: Cesta, cestaNueva: Cesta) {
         viewModelScope.launch {
             bbdd.actualizarCesta(cestaAntigua) // ponerle el true de antes, se podria hacer todo desde la badat
-            val cesta =
-                bbdd.addCesta(cestaNueva) // o reconstruir a partir del id , o buscarlo de nuevo
+            val cesta = bbdd.addCesta(cestaNueva) // o reconstruir a partir del id , o buscarlo de nuevo
             cestaActual.postValue(Cesta(idCesta = cesta.toInt(), false))
         }
     }
 
-
     fun getProducts(): LiveData<MutableList<ProductEntity>> {
-
-       // calcularTotal() // se actualizaria ???
         return products
     }
 
-    private fun calcularTotal() {
-        var copiaProducts = products
+    public fun calcularTotal(): Double { // se actualizara
+        var copiaProducts = products.value!!
         var sumatorio: Double = 0.0
-        copiaProducts.value!!.forEach {
+        copiaProducts.forEach {
             x-> sumatorio+= x.unitPrice
         }
         totalCompra.postValue(sumatorio)
-    }
+        return sumatorio
 
+    }
 
     fun setCestaActual(cesta: Cesta) {
         cestaActual.postValue(cesta)

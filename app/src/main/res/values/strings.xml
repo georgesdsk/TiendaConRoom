@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Stores</string>
+    <string name="app_name">MineStore</string>
     <string name="title_dashboard">CAsita</string>
     <string name="title_home">CAsita</string>
     <string name="save">save</string>
@@ -13,9 +13,8 @@
     <string name="telefono">Telefono</string>
     <string name="cesta">Cesta</string>
     <string name="menu_send">Send</string>
-    <string name="cesta_enviada">Cesta enviada correctamente</string>
     <string name="title_notifications">cositas</string>
-    <string name="dialog_delete_title">Desea borrar el siguiente producto</string>
+    <string name="dialog_delete_title">Desea borrar el siguiente producto?</string>
     <string name="dialog_delete_confirm">Confirmar</string>
     <string name="product_id">idproducto</string>
     <string name="nombreProducto">Nombre:</string>
@@ -28,5 +27,10 @@
     <string name="totalCesta">"Total: "</string>
     <string name="producte_exist">El producto ya esta en la lista</string>
     <string name="product_deleted">El producto ha sido retirado</string>
-    <string name="productos">Productos</string>
+    <string name="productos">MineStore</string>
+    <string name="todo">Funcion por implementar</string>
+    <string name="dineros">€</string>
+    <string name="dialog_delete_cancel">cancelar</string>
+    <string name="enviar_cesta">Desea enviar la cesta?</string>
+    <string name="cesta_enviada">Cesta enviada correctamente</string>
 </resources>

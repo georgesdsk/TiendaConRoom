@@ -1,6 +1,7 @@
 package com.example.kproyectofinal.Fragments.Cesta
 
 import android.content.Context
+import android.provider.Settings.Global.getString
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +23,7 @@ class CestaProductAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         mContext = parent.getContext()
-        val view = LayoutInflater.from(mContext).inflate(R.layout.item_product, parent, false)
+        val view = LayoutInflater.from(mContext).inflate(R.layout.item_product_cesta, parent, false)
         return ViewHolder(view) // asegurarse de darle al mip
         // Se guarda en el HOLDER, la vista a insertarse en todos los elementos de la lista
     }
@@ -44,6 +45,9 @@ class CestaProductAdapter(
                 .circleCrop()
                 .into(binding.imgStore)
             binding.cbFavorite.isChecked = product.isFavorite
+
+            binding.tvPrecio.text =  product.unitPrice.toString() +"€"
+
         }
 
 

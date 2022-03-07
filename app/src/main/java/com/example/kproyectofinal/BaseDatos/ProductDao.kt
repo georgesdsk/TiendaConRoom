@@ -21,7 +21,7 @@ interface ProductDao {
     fun delete(product: ProductEntity)
 
     @Update
-    fun actualizarCesta(cesta: Cesta)
+    suspend fun actualizarCesta(cesta: Cesta)
 
 // se podria mejorar
     @Query("SELECT * FROM ProductCestaReferencia" +
@@ -42,7 +42,7 @@ interface ProductDao {
     suspend fun insertarProductoCesta(productoCestaReferencia: ProductCestaReferencia) // hacer que se actualice en la pantalla
 
     @Delete()
-    fun borrarProductoCesta(productoCestaReferencia: ProductCestaReferencia)
+    suspend fun borrarProductoCesta(productoCestaReferencia: ProductCestaReferencia)
 
     @Delete()
     fun borrarCesta(cesta: Cesta)

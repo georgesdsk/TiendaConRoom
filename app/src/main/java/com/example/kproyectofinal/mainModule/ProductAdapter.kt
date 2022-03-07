@@ -45,6 +45,7 @@ class ProductAdapter(
                 .circleCrop()
                 .into(binding.imgStore)
             binding.cbFavorite.isChecked = product.isFavorite
+            binding.tvPrecio.text = product.unitPrice.toString() +"€"
         }
 
 
