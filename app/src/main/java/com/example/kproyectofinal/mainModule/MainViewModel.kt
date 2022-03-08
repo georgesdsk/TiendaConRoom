@@ -40,7 +40,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    fun getCesta() {
+    fun getCesta(): MutableLiveData<Cesta> {
         viewModelScope.launch { // si no hay ninguna cesta que te devuelve?
             var cesta: Cesta = bbdd.getCesta()
             if (cesta == null) {
@@ -49,10 +49,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
             cestaActual.postValue(cesta)
         }
+        return cestaActual
     }
-
-
-
 
 
     fun insertarCesta(cestaNueva: Cesta) {

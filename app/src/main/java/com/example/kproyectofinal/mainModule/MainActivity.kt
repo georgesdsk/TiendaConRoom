@@ -42,10 +42,10 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         setContentView(mBinding.root)
         productDao = TiendaBBDD.getInsance(this).productDao
 
+
         setupViewModel()
         setupRecyclerView()
-        /* insertarProductos()
-         insertarCesta()*/
+        //insertarCesta()
 
     }
 
@@ -63,18 +63,15 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         mMainViewModel.isLoading.observe(this, Observer {
             mBinding.progressBar.isVisible = it
         })
-        mMainViewModel.getCesta()
-        mMainViewModel.cestaActual.observe(this, {})
+        mMainViewModel.getCesta().value
         mMainViewModel.setFragment("Inicio")
 
         mProductDetailsViewModel = ViewModelProvider(this)[ProductDetailsViewModel::class.java]
         mCestaViewModel = ViewModelProvider(this)[CestaViewModel::class.java]
 
-        mCestaViewModel.cestaActual.observe(this){cesta->
-            mMainViewModel.setCesta(cesta)
-
-        }
-
+//        mCestaViewModel.cestaActual.observe(this){cesta->
+//            mMainViewModel.setCesta(cesta)
+//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -104,6 +101,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     private fun launchProductFragment(productEntity: ProductEntity = ProductEntity()) {
         mMainViewModel.setFragment("product")
         mProductDetailsViewModel.setProdctoActual(productEntity)
+        mMainViewModel.getCesta().value
         mProductDetailsViewModel.setCestaActual(mMainViewModel.cestaActual.value!!)
 
         val fragment = FragmentProductDetails();
@@ -115,8 +113,8 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     }
 
     private fun launchCestaFragment() {
+        //mCestaViewModel.setCestaActual(mMainViewModel.cestaActual.value!!)
         mMainViewModel.setFragment("cesta")
-        mCestaViewModel.setCestaActual(mMainViewModel.cestaActual.value!!)
         val fragment = FragmentCesta()
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()

@@ -27,27 +27,16 @@ class CestaViewModel(application: Application) : AndroidViewModel(application) {
 
     private val products: LiveData<MutableList<ProductEntity>> = liveData {
         isLoading.postValue(true)
+        initCesta()
         val productLiveData = bbdd.getProductosCesta(cestaActual.value!!.idCesta)
         emitSource(productLiveData.map { products -> products.sortedBy { it.name }.toMutableList() }
         )
         isLoading.postValue(false)
     }
 
-    fun actualizarProductos(){
-        
-
-    }
-
 
 
     //he cambiado el Job
-    fun newCesta(cestaAntigua: Cesta, cestaNueva: Cesta) {
-        viewModelScope.launch {
-            bbdd.actualizarCesta(cestaAntigua) // ponerle el true de antes, se podria hacer todo desde la badat
-            val cesta = bbdd.addCesta(cestaNueva) // o reconstruir a partir del id , o buscarlo de nuevo
-            cestaActual.postValue(Cesta(idCesta = cesta.toInt(), false))
-        }
-    }
 
     fun getProducts(): LiveData<MutableList<ProductEntity>> {
         return products
@@ -61,17 +50,40 @@ class CestaViewModel(application: Application) : AndroidViewModel(application) {
         }
         totalCompra.postValue(sumatorio)
         return sumatorio
-
     }
 
     fun setCestaActual(cesta: Cesta) {
         cestaActual.postValue(cesta)
     }
 
-    fun getCestaActuall(): MutableLiveData<Cesta> {
-        return cestaActual
+
+    fun initCesta()  {
+        viewModelScope.launch { // si no hay ninguna cesta que te devuelve?
+            var cesta: Cesta = bbdd.getCesta()
+            cesta.idCesta
+            if (cesta.idCesta == 0) {
+                cesta = Cesta()// mirar el id
+                insertarCesta(cesta)
+            }
+            cestaActual.postValue(cesta)
+        }
+
     }
 
+    fun insertarCesta(cestaNueva: Cesta) {
+        viewModelScope.launch {
+            val cesta = bbdd.addCesta(cestaNueva) // no se como funcionara
+            cestaActual.postValue(Cesta(idCesta = cesta.toInt(), false))
+        }
+    }
+
+    fun cambiarCestaActual(cestaAntigua: Cesta, cestaNueva: Cesta) {
+        viewModelScope.launch {
+            bbdd.actualizarCesta(cestaAntigua) // ponerle el true de antes, se podria hacer todo desde la badat
+            val cesta = bbdd.addCesta(cestaNueva) // o reconstruir a partir del id , o buscarlo de nuevo
+            cestaActual.postValue(Cesta(idCesta = cesta.toInt(), false))
+        }
+    }
 
     //realmente no se  tiene que comunicar con la interfaz pero paso, todo preguntar antes
     fun deleteProduct(producto: ProductEntity): Boolean {
@@ -85,6 +97,11 @@ class CestaViewModel(application: Application) : AndroidViewModel(application) {
             Toast.makeText(context, R.string.product_deleted, Toast.LENGTH_SHORT).show()
         }
         return true
+    }
+
+    fun getCesta(): MutableLiveData<Cesta> {
+        return cestaActual
+
     }
 
 }

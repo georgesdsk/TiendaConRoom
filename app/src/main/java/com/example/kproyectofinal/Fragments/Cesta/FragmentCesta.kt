@@ -37,20 +37,23 @@ class FragmentCesta : Fragment(), CestaOnClickListener {
     //todo mirar el observer
     private fun setupViewModel() {
         mCestaViewModel = ViewModelProvider(requireActivity())[CestaViewModel::class.java]
-        mCestaViewModel.getProducts().observe(requireActivity()) { products ->
-            mAdapter.setProducts(products)
-            mCestaViewModel.calcularTotal()
+        mCestaViewModel.initCesta()
+        mCestaViewModel.cestaActual.observe(requireActivity()){ cesta->
+            reiniciar()
         }
+
+        mCestaViewModel.
+
         mCestaViewModel.totalCompra.observe(requireActivity()) { total ->
             val totalString = total.toString()
             mBinding.tvTotalCompra.setText(totalString + "€")
         }
-        mCestaViewModel.cestaActual.observe(requireActivity()){ cesta->
-            reiniciar()
-        }
+
+
+
     }
+
     private fun reiniciar(){
-        mCestaViewModel = ViewModelProvider(requireActivity())[CestaViewModel::class.java]
         mCestaViewModel.getProducts().observe(requireActivity()) { products ->
             mAdapter.setProducts(products)
             mCestaViewModel.calcularTotal()
@@ -116,9 +119,9 @@ class FragmentCesta : Fragment(), CestaOnClickListener {
                 .setTitle(R.string.enviar_cesta)
                 .setPositiveButton(R.string.dialog_delete_confirm) { _, _ ->
                    enviarCorreo()
-                    var cestaActual = mCestaViewModel.getCestaActuall().value!!
+                    var cestaActual = mCestaViewModel.getCesta().value!!
                     cestaActual.estadoCesta = true
-                    mCestaViewModel.newCesta(cestaActual,Cesta())
+                    mCestaViewModel.cambiarCestaActual(cestaActual,Cesta())
                     Toast.makeText(requireContext(), getString(R.string.cesta_enviada), Toast.LENGTH_LONG)
                 }
                 .setNegativeButton(R.string.dialog_delete_cancel, null)
