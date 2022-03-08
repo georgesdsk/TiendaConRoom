@@ -14,58 +14,40 @@ import com.example.kproyectofinal.Entidades.ProductEntity
 import com.example.kproyectofinal.R
 import com.example.kproyectofinal.databinding.FragmentCestaBinding
 import com.example.kproyectofinal.mainModule.MainActivity
+import com.example.kproyectofinal.mainModule.MainViewModel
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
-class FragmentCesta : Fragment(), CestaOnClickListener {
+class FragmentCesta(mMainViewModel: MainViewModel) : Fragment(), CestaOnClickListener {
 
     private lateinit var mBinding: FragmentCestaBinding
     private var mActivity: MainActivity? = null
     private lateinit var mAdapter: CestaProductAdapter
     private lateinit var mGridLayout: GridLayoutManager
-
     private lateinit var mCestaViewModel: CestaViewModel
-
+    private lateinit var mMainViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
     }
 
     //todo mirar el observer
     private fun setupViewModel() {
+
+        mMainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         mCestaViewModel = ViewModelProvider(requireActivity())[CestaViewModel::class.java]
-        mCestaViewModel.initCesta()
-        mCestaViewModel.cestaActual.observe(requireActivity()){ cesta->
-            reiniciar()
-        }
-
-        mCestaViewModel.
-
-        mCestaViewModel.totalCompra.observe(requireActivity()) { total ->
-            val totalString = total.toString()
-            mBinding.tvTotalCompra.setText(totalString + "€")
-        }
-
-
-
-    }
-
-    private fun reiniciar(){
         mCestaViewModel.getProducts().observe(requireActivity()) { products ->
             mAdapter.setProducts(products)
             mCestaViewModel.calcularTotal()
-            Toast.makeText(requireContext(), getString(R.string.cesta_enviada), Toast.LENGTH_LONG)
         }
-
         mCestaViewModel.totalCompra.observe(requireActivity()) { total ->
             val totalString = total.toString()
             mBinding.tvTotalCompra.setText(totalString + "€")
         }
 
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -106,23 +88,24 @@ class FragmentCesta : Fragment(), CestaOnClickListener {
             layoutManager = mGridLayout
             adapter = mAdapter
         }
-
     }
 
 
 
     fun setOnClickers() {
         mBinding.fab.setOnClickListener {
-            mBinding.bottomAppBar.fabAlignmentMode == BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
+            mBinding.bottomAppBar.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
             mBinding.bottomAppBar.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_END
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.enviar_cesta)
                 .setPositiveButton(R.string.dialog_delete_confirm) { _, _ ->
-                   enviarCorreo()
-                    var cestaActual = mCestaViewModel.getCesta().value!!
+
+                    var cestaActual = mCestaViewModel.cestaActual.value!!
                     cestaActual.estadoCesta = true
-                    mCestaViewModel.cambiarCestaActual(cestaActual,Cesta())
+                    val cesta = Cesta()
+                    mCestaViewModel.cambiarCestaActual(cestaActual,cesta) // cambia la base de datos, pero como hacerle al viewModel
                     Toast.makeText(requireContext(), getString(R.string.cesta_enviada), Toast.LENGTH_LONG)
+                    requireActivity().onBackPressed()
                 }
                 .setNegativeButton(R.string.dialog_delete_cancel, null)
                 .show()

@@ -1,12 +1,11 @@
 package com.example.kproyectofinal.mainModule
 
-import android.app.PendingIntent.getActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -45,10 +44,9 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
         setupViewModel()
         setupRecyclerView()
-        //insertarCesta()
+
 
     }
-
 
 
     private fun insertarCesta() {
@@ -63,15 +61,17 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         mMainViewModel.isLoading.observe(this, Observer {
             mBinding.progressBar.isVisible = it
         })
-        mMainViewModel.getCesta().value
+
         mMainViewModel.setFragment("Inicio")
 
         mProductDetailsViewModel = ViewModelProvider(this)[ProductDetailsViewModel::class.java]
         mCestaViewModel = ViewModelProvider(this)[CestaViewModel::class.java]
 
-//        mCestaViewModel.cestaActual.observe(this){cesta->
-//            mMainViewModel.setCesta(cesta)
-//        }
+        mCestaViewModel.cestaActual.observe(this) { cesta ->
+
+            Toast.makeText(this, cesta.idCesta.toString() + "observer", Toast.LENGTH_LONG).show()
+
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -79,17 +79,26 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         return true
     }
 
+    override fun onBackPressed() {
+        mMainViewModel.setFragment("Inicio")
+        Toast.makeText(this, mMainViewModel.getCesta().value!!.toString() + "viewmodel", Toast.LENGTH_LONG).show()
+
+        this.supportActionBar?.title = getString(R.string.productos)
+        super.onBackPressed()
+    }
+
 
     //la barra superior
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         android.R.id.home -> {
-            mMainViewModel.setFragment("Inicio")
-            this.supportActionBar?.title = getString(R.string.productos)
+
             this.onBackPressed()
             true
         }
         R.id.action_send -> {
-            if (!mMainViewModel.getFragment().equals("cesta")) { // para que no se pueda entrar desde cesta
+            if (!mMainViewModel.getFragment()
+                    .equals("cesta")
+            ) { // para que no se pueda entrar desde cesta
                 launchCestaFragment()
             }
             true
@@ -101,7 +110,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     private fun launchProductFragment(productEntity: ProductEntity = ProductEntity()) {
         mMainViewModel.setFragment("product")
         mProductDetailsViewModel.setProdctoActual(productEntity)
-        mMainViewModel.getCesta().value
+
         mProductDetailsViewModel.setCestaActual(mMainViewModel.cestaActual.value!!)
 
         val fragment = FragmentProductDetails();
@@ -113,9 +122,10 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     }
 
     private fun launchCestaFragment() {
-        //mCestaViewModel.setCestaActual(mMainViewModel.cestaActual.value!!)
+
+        mCestaViewModel.setCestaActual(mMainViewModel.cestaActual.value!!)
         mMainViewModel.setFragment("cesta")
-        val fragment = FragmentCesta()
+        val fragment = FragmentCesta(mMainViewModel)
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.addToBackStack("cesta") // todo se anade para el paso atras
@@ -199,7 +209,6 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         )
         productos.forEach { x -> mMainViewModel.insertarProducto(x) }
     }
-
 
 
 /*

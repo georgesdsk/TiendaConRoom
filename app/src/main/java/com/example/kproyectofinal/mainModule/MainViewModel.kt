@@ -37,6 +37,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setCesta(cesta: Cesta){
         cestaActual.postValue(cesta)
+        insertarCesta(cesta)
     }
 
 
