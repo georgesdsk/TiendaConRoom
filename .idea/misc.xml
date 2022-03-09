@@ -4,6 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/hsadouski/Desktop/ANDR/Android/k.ProyectoFinal/app/src/main/res/drawable/state_cb_favorite.xml" value="0.1" />
+        <entry key="..\:/Users/hsadouski/Desktop/ANDR/Android/k.ProyectoFinal/app/src/main/res/layout/fragment_product_details.xml" value="0.4247020585048754" />
+        <entry key="..\:/Users/hsadouski/Desktop/ANDR/Android/k.ProyectoFinal/app/src/main/res/layout/gridview.xml" value="0.5" />
+        <entry key="..\:/Users/hsadouski/Desktop/ANDR/Android/k.ProyectoFinal/app/src/main/res/layout/item_product.xml" value="0.3385416666666667" />
+        <entry key="..\:/Users/hsadouski/Desktop/ANDR/Android/k.ProyectoFinal/app/src/main/res/layout/item_product_cesta.xml" value="0.3385416666666667" />
+        <entry key="..\:/Users/hsadouski/Desktop/ANDR/Android/k.ProyectoFinal/app/src/main/res/layout/productdetails.xml" value="0.1" />
         <entry key="..\:/Users/sadac/AndroidStudioProjects/kProyectoFinal/app/src/main/res/drawable/ic_add.xml" value="0.1965" />
         <entry key="..\:/Users/sadac/AndroidStudioProjects/kProyectoFinal/app/src/main/res/drawable/ic_cesta.xml" value="0.1135" />
         <entry key="..\:/Users/sadac/AndroidStudioProjects/kProyectoFinal/app/src/main/res/drawable/ic_cesta_border.xml" value="0.1105" />

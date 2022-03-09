@@ -60,8 +60,8 @@ class FragmentProductDetails : Fragment() {
     private fun inlfarVista(mSelectedProduct: ProductEntity) {
         with(mBinding) {
             tvNombre.setText(mSelectedProduct.name)
-            tvPrecio.setText(mSelectedProduct.unitPrice.toString())
-            tvPrecioUnitario.setText(mSelectedProduct.priceKgL.toString())
+            tvPrecio.setText(mSelectedProduct.unitPrice.toString() + " €")
+            tvPrecioUnitario.setText(mSelectedProduct.priceKgL.toString() + " €")
             Glide.with(requireActivity())
                 .load(mSelectedProduct.image)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
