@@ -19,8 +19,8 @@
     <string name="product_id">idproducto</string>
     <string name="nombreProducto">Nombre:</string>
     <string name="precioProducto">Precio:</string>
-    <string name="precioUnitario">Precio Kg/L</string>
-    <string name="Categoria">Categoria</string>
+    <string name="precioUnitario">Precio Kg/L:</string>
+    <string name="Categoria">Categoria:</string>
     <string name="anhadirCesta">Añadir a la cesta</string>
     <string name="idCesta">idCesta</string>
     <string name="detallesProducto">Product Details</string>
@@ -33,4 +33,12 @@
     <string name="dialog_delete_cancel">cancelar</string>
     <string name="enviar_cesta">Desea enviar la cesta?</string>
     <string name="cesta_enviada">Cesta enviada correctamente</string>
+    <string name="limpieza">Limpieza</string>
+    <string-array name="planets_array">
+        <item>Filtrar</item>
+    </string-array>
+    <string-array name="array">
+        <item>Ordenar</item>
+    </string-array>
+
 </resources>

@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import androidx.lifecycle.map
+import com.example.kproyectofinal.BaseDatos.ProductCestaReferencia
 import com.example.kproyectofinal.BaseDatos.TiendaBBDD
 import com.example.kproyectofinal.Entidades.Cesta
 
@@ -30,18 +31,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val products: LiveData<MutableList<ProductEntity>> = liveData {
         isLoading.postValue(true)
         val productLiveData = bbdd.getAllProducts()
-        emitSource(productLiveData.map { products -> products.sortedBy { it.name }.toMutableList() }
+        emitSource(
+            productLiveData.map {
+                products -> products.sortedBy {
+                it.name }.toMutableList() }
         )
         isLoading.postValue(false)
     }
 
     fun setCesta(cesta: Cesta){
         cestaActual.postValue(cesta)
-        insertarCesta(cesta)
     }
 
-
-    fun getCesta(): MutableLiveData<Cesta> {
+    fun getCesta() {
         viewModelScope.launch { // si no hay ninguna cesta que te devuelve?
             var cesta: Cesta = bbdd.getCesta()
             if (cesta == null) {
@@ -50,14 +52,30 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
             cestaActual.postValue(cesta)
         }
-        return cestaActual
     }
 
+    fun addProduct(productEntity: ProductEntity):Boolean {
+
+        var boolean = false
+        viewModelScope.launch {
+            if(bbdd.productoEnCesta(cestaActual.value!!.idCesta, productEntity.id) == null ){ // si el producto no existe en la cesta
+                bbdd.insertarProductoCesta(ProductCestaReferencia(cestaActual.value!!.idCesta, productEntity.id))
+                boolean = true
+                Toast.makeText(context, "Producto añadido con exito", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(context, R.string.producte_exist, Toast.LENGTH_SHORT).show()
+            }
+        }
+        return boolean
+
+    }
 
     fun insertarCesta(cestaNueva: Cesta) {
         viewModelScope.launch {
             val cesta = bbdd.addCesta(cestaNueva) // no se como funcionara
-            cestaActual.postValue(Cesta(idCesta = cesta.toInt(), false))
+            cestaActual.postValue(
+                Cesta(idCesta = cesta.toInt(), false)
+            )
         }
     }
 
@@ -77,8 +95,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getFragment(): String{
         return fragment.value!!
+    }
+
+     fun onCestaProduct(productEntity: ProductEntity) {
+
+        productEntity.isFavorite = !productEntity.isFavorite;
+
+         viewModelScope.launch {
+             bbdd.update(productEntity)
+         }
 
     }
+
 
 /*
     fun getProduct(id: Int): MutableLiveData<ProductEntity> {

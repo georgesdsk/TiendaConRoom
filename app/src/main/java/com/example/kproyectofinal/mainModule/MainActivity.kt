@@ -3,6 +3,9 @@ package com.example.kproyectofinal.mainModule
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -41,25 +44,22 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         setContentView(mBinding.root)
         productDao = TiendaBBDD.getInsance(this).productDao
 
-
         setupViewModel()
         setupRecyclerView()
-
-
+        //Primera ejecucion
+        /* insertarProductos()
+         insertarCesta()*/
     }
 
-
-    private fun insertarCesta() {
-        mMainViewModel.insertarCesta(Cesta())
-    }
 
     private fun setupViewModel() {
         mMainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         mMainViewModel.getProducts().observe(this) { products ->
-            mAdapter.setProducts(products)
+            mAdapter.setProducts(products) // podria hacer un metodo que haga una modificacion de products
         }
-        mMainViewModel.isLoading.observe(this, Observer {
-            mBinding.progressBar.isVisible = it
+
+        mMainViewModel.getCesta() // que cuando vaya para atras se vuelva a hacer getCesta
+        mMainViewModel.cestaActual.observe(this, {
         })
 
         mMainViewModel.setFragment("Inicio")
@@ -67,11 +67,18 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         mProductDetailsViewModel = ViewModelProvider(this)[ProductDetailsViewModel::class.java]
         mCestaViewModel = ViewModelProvider(this)[CestaViewModel::class.java]
 
-        mCestaViewModel.cestaActual.observe(this) { cesta ->
-
-            Toast.makeText(this, cesta.idCesta.toString() + "observer", Toast.LENGTH_LONG).show()
-
+        mMainViewModel.cestaActual.observe(this) { cesta ->
         }
+
+        mMainViewModel.isLoading.observe(this, Observer {
+            mBinding.progressBar.isVisible = it
+        })
+
+    }
+
+    override fun onBackPressed() {
+        mMainViewModel.setFragment("Inicio")
+        super.onBackPressed()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -79,19 +86,11 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         return true
     }
 
-    override fun onBackPressed() {
-        mMainViewModel.setFragment("Inicio")
-        Toast.makeText(this, mMainViewModel.getCesta().value!!.toString() + "viewmodel", Toast.LENGTH_LONG).show()
-
-        this.supportActionBar?.title = getString(R.string.productos)
-        super.onBackPressed()
-    }
-
-
     //la barra superior
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         android.R.id.home -> {
-
+            mMainViewModel.setFragment("Inicio")
+            this.supportActionBar?.title = getString(R.string.productos)
             this.onBackPressed()
             true
         }
@@ -110,28 +109,26 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     private fun launchProductFragment(productEntity: ProductEntity = ProductEntity()) {
         mMainViewModel.setFragment("product")
         mProductDetailsViewModel.setProdctoActual(productEntity)
-
         mProductDetailsViewModel.setCestaActual(mMainViewModel.cestaActual.value!!)
-
         val fragment = FragmentProductDetails();
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.addToBackStack("producto") // todo se anade para el paso atras
         fragmentTransaction.add(R.id.containerMain, fragment)
         fragmentTransaction.commit()
+        mBinding.button.setVisibility(View.GONE);
     }
 
     private fun launchCestaFragment() {
-
-        mCestaViewModel.setCestaActual(mMainViewModel.cestaActual.value!!)
         mMainViewModel.setFragment("cesta")
-        val fragment = FragmentCesta(mMainViewModel)
+        mCestaViewModel.setCestaActuall(mMainViewModel.cestaActual) // se pasa el mismo objeto
+        val fragment = FragmentCesta()
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.addToBackStack("cesta") // todo se anade para el paso atras
         fragmentTransaction.add(R.id.containerMain, fragment)
         fragmentTransaction.commit()
-        mBinding.fab.hide()
+        mBinding.button.setVisibility(View.GONE);
     }
 
     private fun setupRecyclerView() {
@@ -143,22 +140,53 @@ class MainActivity : AppCompatActivity(), OnClickListener {
             layoutManager = mGridLayout
             adapter = mAdapter
         }
+
+        val spinner: Spinner = mBinding.spinner
+        val spinner2: Spinner = mBinding.spinner2
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.planets_array,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinner.adapter = adapter
+
+        }
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.array,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinner2.adapter = adapter
+
+        }
+
     }
 
     // lo ideal seria que este producto se guarde en el vm y se pase al otro fragment
     override fun onClick(productEntity: ProductEntity) {
         launchProductFragment(productEntity)
-
     }
 
     override fun onCestaProduct(productEntity: ProductEntity) {
-        Snackbar.make(
-            mBinding.root,
-            getString(R.string.todo),
-            Snackbar.LENGTH_SHORT
-        )
-            .show()
+        if (mMainViewModel.addProduct(productEntity)) {
+            productEntity.isFavorite = true;
+            mAdapter.update(productEntity)
+            Toast.makeText(this, "Producto añadido con exito", Toast.LENGTH_SHORT).show()
+        }
     }
+
+    //Metodo complementarios
+
+    private fun insertarCesta() {
+        mMainViewModel.insertarCesta(Cesta())
+    }
+
 
     private fun insertarProductos() {
         val productos = listOf(
@@ -211,26 +239,72 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     }
 
 
-/*
-    override fun onCestaProduct(productEntity: ProductEntity) {
-        productEntity.isFavorite = !productEntity.isFavorite;
-
-        doAsync {
-            appBbDD.database.productDao.update(productEntity) //productDao()
-            uiThread {
-                mAdapter.update(productEntity)
-            }
-        }
 
 
-    }
-*/
+
 
     /*todo avisar de que se va a borrar un producto, cuando se seleccione uno, que salga la vista de seleccion:
         -en todos los objetos de la lista abilitar el checkbox
         -a la hora de borrar :
             recorrer todo el listado y borrar los seleccionados
             crear un nuevo listado de seleccionados, problema de no saber cuando se quita un objeto de ese listado
+
+
+private fun showFilterDialog() {
+        val filterDialog = layoutInflater.inflate(R.layout.filter_dialog_layout, null)
+        val orderCriteriaSpinner =
+            filterDialog.findViewById<Spinner>(R.id.filter_dialog_layoutorder_criteria_spinner)
+        val categoriesSpinner =
+            filterDialog.findViewById<Spinner>(R.id.filter_dialog_layoutcategories_spinner)
+        val orderByAdapter: ArrayAdapter<String> = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            mutableListOf("Precio", "Nombre")
+        )
+        val filterAdapter: ArrayAdapter<String> = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            categoriesList
+        )
+        categoriesSpinner.adapter = filterAdapter
+        orderCriteriaSpinner.adapter = orderByAdapter
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Filtrar")
+            .setView(filterDialog)
+            .setCancelable(true)
+            .setPositiveButton("Filtrar") { asidhas, qerqwer ->
+                val criteria: String = orderCriteriaSpinner.selectedItem.toString()
+                val category: String = categoriesSpinner.selectedItem.toString()
+                filterList(criteria, category)
+            }
+            .show()
+    }
+
+private fun searchByName(query: String){
+        CoroutineScope(Dispatchers.IO).launch {
+            activity?.runOnUiThread {
+                if(!query.isNullOrEmpty()){
+                    listaProductos.clear()
+                    productos.find {
+                        it.nombre.lowercase().contains(query)
+                    }?.let { listaProductos.add(it) }
+                    adapter.notifyDataSetChanged()
+                }else{
+                    listaProductos.clear()
+                    listaProductos.addAll(productos)
+                    adapter.notifyDataSetChanged()
+                }
+                hideKeyboard()
+            }
+
+        }
+    }
+private fun hideKeyboard(){
+        val imm = requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
+    }
+
+
 
     * */
 

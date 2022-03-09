@@ -2,15 +2,15 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:drawable="@drawable/ic_fav_border"
+        android:drawable="@drawable/ic_cesta_border"
         android:state_checked="false"
         />
     <item
-        android:drawable="@drawable/ic_fav"
+        android:drawable="@drawable/ic_cesta"
         android:state_checked="true"
         />
     <item
-        android:drawable="@drawable/ic_fav_border"/>
+        android:drawable="@drawable/ic_cesta_border"/>
 
 
 </selector>

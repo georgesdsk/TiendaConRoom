@@ -48,6 +48,7 @@ class ProductDetailsViewModel(application: Application): AndroidViewModel(applic
         viewModelScope.launch {
             if(bbdd.productoEnCesta(cestaActual.value!!.idCesta, productoActual.value!!.id) == null ){ // si el producto no existe en la cesta
                 bbdd.insertarProductoCesta(ProductCestaReferencia(cestaActual.value!!.idCesta, productoActual.value!!.id))
+                Toast.makeText(context, "Producto añadido con exito", Toast.LENGTH_SHORT).show()
             }else{
                 Toast.makeText(context, R.string.producte_exist, Toast.LENGTH_SHORT).show()
             }

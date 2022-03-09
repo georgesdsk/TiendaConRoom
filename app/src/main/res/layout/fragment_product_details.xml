@@ -8,11 +8,15 @@
     tools:context=".Fragments.ProductDetails.FragmentProductDetails">
 
 
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="@dimen/common_padding_deffault">
+
+
 
 
         <TextView
@@ -21,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/common_padding_deffault"
             android:text="@string/nombreProducto"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,9 +34,10 @@
             android:id="@+id/tvNombre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:layout_marginStart="@dimen/common_padding_deffault"
+
             android:text="@string/nombreProducto"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             app:layout_constraintBottom_toBottomOf="@+id/tituloNombre"
             app:layout_constraintStart_toEndOf="@id/tituloNombre" />
 
@@ -42,24 +47,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/common_padding_deffault"
+
             android:layout_marginStart="32dp"
             android:text="@string/precioProducto"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tituloNombre" />
 
         <TextView
             android:id="@+id/tvPrecio"
             android:layout_width="wrap_content"
+
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/common_padding_deffault"
             android:text="@string/nombreProducto"
-            app:layout_constraintStart_toEndOf="@+id/tituloPrecio"
-            app:layout_constraintTop_toTopOf="@+id/tituloPrecio" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            app:layout_constraintBottom_toBottomOf="@+id/tituloPrecio"
+            app:layout_constraintStart_toEndOf="@+id/tituloPrecio" />
 
         <TextView
             android:id="@+id/tituloPrecioUnitario"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:layout_margin="@dimen/common_padding_deffault"
             android:text="@string/precioUnitario"
             app:layout_constraintStart_toStartOf="parent"
@@ -71,8 +82,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/common_padding_deffault"
             android:text="@string/nombreProducto"
-            app:layout_constraintStart_toEndOf="@+id/tituloPrecioUnitario"
-            app:layout_constraintTop_toTopOf="@+id/tituloPrecioUnitario" />
+
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            app:layout_constraintBottom_toBottomOf="@+id/tituloPrecioUnitario"
+            app:layout_constraintStart_toEndOf="@+id/tituloPrecioUnitario" />
 
 
         <TextView
@@ -81,6 +94,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/common_padding_deffault"
             android:text="@string/Categoria"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tituloPrecioUnitario" />
 
@@ -89,11 +104,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/common_padding_deffault"
-            android:text="@string/nombreProducto"
-            app:layout_constraintStart_toEndOf="@+id/tituloCategoria"
-            app:layout_constraintTop_toTopOf="@+id/tituloCategoria" />
+            android:text="@string/limpieza"
+
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            app:layout_constraintBottom_toBottomOf="@+id/tituloCategoria"
+            app:layout_constraintStart_toEndOf="@+id/tituloCategoria" />
 
         <ImageView
+
             android:id="@+id/imagen"
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -107,7 +125,8 @@
             android:id="@+id/botonAnhadirCesta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/common_padding_deffault"
+            android:layout_marginTop="42dp"
+
             android:text="@string/anhadirCesta"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

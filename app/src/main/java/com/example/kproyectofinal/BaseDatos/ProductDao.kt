@@ -27,7 +27,7 @@ interface ProductDao {
     @Query("SELECT * FROM ProductCestaReferencia" +
             " INNER JOIN ProductEntity ON ProductEntity.id = ProductCestaReferencia.id" +
             " WHERE idCesta = :id ") // solo tendria los ids
-    fun getProductosCesta(id: Int): LiveData<MutableList<ProductEntity>>
+    suspend fun getProductosCesta(id: Int): List<ProductEntity>
 
     @Query("SELECT * FROM Cesta WHERE estadoCesta = 0") // tiene que devolver solo uno
     suspend fun getCesta(): Cesta

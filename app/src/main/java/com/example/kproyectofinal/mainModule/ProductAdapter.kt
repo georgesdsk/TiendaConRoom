@@ -82,11 +82,8 @@ class ProductAdapter(
     }
 
     fun setCesta(cesta: Cesta) {
-
         add(ProductEntity(name = cesta.idCesta.toString()))
-
     }
-
 
     inner class ViewHolder(var view: View) : RecyclerView.ViewHolder(view) {
         val binding = ItemProductBinding.bind(view)

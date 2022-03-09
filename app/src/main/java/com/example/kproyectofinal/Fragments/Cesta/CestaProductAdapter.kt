@@ -14,7 +14,7 @@ import com.example.kproyectofinal.R
 import com.example.kproyectofinal.databinding.ItemProductBinding
 
 class CestaProductAdapter(
-    private var productList: MutableList<ProductEntity>,
+    private var productList: List<ProductEntity>,
     private var listener: CestaOnClickListener
 ) :
      RecyclerView.Adapter<CestaProductAdapter.ViewHolder>() {
@@ -22,7 +22,7 @@ class CestaProductAdapter(
     private lateinit var mContext: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        mContext = parent.getContext()
+        mContext = parent.context
         val view = LayoutInflater.from(mContext).inflate(R.layout.item_product_cesta, parent, false)
         return ViewHolder(view) // asegurarse de darle al mip
         // Se guarda en el HOLDER, la vista a insertarse en todos los elementos de la lista
@@ -47,24 +47,20 @@ class CestaProductAdapter(
             binding.cbFavorite.isChecked = product.isFavorite
 
             binding.tvPrecio.text =  product.unitPrice.toString() +"€"
-
         }
-
-
     }
 
     override fun getItemCount(): Int = productList.size;
 
-
-    fun setProducts(products: MutableList<ProductEntity>) {
+    fun setProducts(products: List<ProductEntity>) {
         productList = products
         notifyDataSetChanged();
     }
 
 
-    fun add(productEntity: ProductEntity) {
+/*    fun add(productEntity: ProductEntity) {
         productList.add(productEntity)
-        notifyDataSetChanged()
+        notifyItemChanged(productList.size-1)
     }
 
     fun update(productEntity: ProductEntity) {
@@ -88,7 +84,7 @@ class CestaProductAdapter(
         add(ProductEntity(name = cesta.idCesta.toString()))
 
     }
-
+*/
 
     inner class ViewHolder(var view: View) : RecyclerView.ViewHolder(view) {
         val binding = ItemProductBinding.bind(view)

@@ -4,7 +4,12 @@
     android:layout_height="100dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="@dimen/common_padding_min"
-    android:layout_marginHorizontal="@dimen/common_padding_min">
+    android:layout_marginHorizontal="@dimen/common_padding_min"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="50dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="@color/cardview_shadow_start_color"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -14,7 +19,6 @@
             android:id="@+id/imgStore"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@android:color/darker_gray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -30,7 +34,8 @@
             android:background="@color/white_t"
             android:maxLines="1"
             android:ellipsize="end"
-            android:padding="4dp"
+            android:paddingLeft="@dimen/common_padding_deffault"
+            android:padding="6dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -42,6 +47,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
+            android:layout_marginRight="@dimen/common_padding_min"
             android:padding="4dp"
             android:text="Nombre de la  tienda"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
