@@ -35,10 +35,12 @@
     <string name="cesta_enviada">Cesta enviada correctamente</string>
     <string name="limpieza">Limpieza</string>
     <string-array name="planets_array">
-        <item>Filtrar</item>
+        <item>
+            Ordenar
+        </item>
     </string-array>
     <string-array name="array">
-        <item>Ordenar</item>
+        <item>Filtrar</item>
     </string-array>
 
 </resources>

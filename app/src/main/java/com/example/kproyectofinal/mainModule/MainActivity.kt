@@ -22,6 +22,7 @@ import com.example.kproyectofinal.Fragments.ProductDetails.FragmentProductDetail
 import com.example.kproyectofinal.Fragments.ProductDetails.ProductDetailsViewModel
 import com.example.kproyectofinal.R
 import com.example.kproyectofinal.databinding.ActivityMainBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 
 
@@ -47,8 +48,8 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         setupViewModel()
         setupRecyclerView()
         //Primera ejecucion
-        /* insertarProductos()
-         insertarCesta()*/
+        insertarProductos()
+         /*insertarCesta()*/
     }
 
 
@@ -116,7 +117,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         fragmentTransaction.addToBackStack("producto") // todo se anade para el paso atras
         fragmentTransaction.add(R.id.containerMain, fragment)
         fragmentTransaction.commit()
-        mBinding.button.setVisibility(View.GONE);
+
     }
 
     private fun launchCestaFragment() {
@@ -128,7 +129,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         fragmentTransaction.addToBackStack("cesta") // todo se anade para el paso atras
         fragmentTransaction.add(R.id.containerMain, fragment)
         fragmentTransaction.commit()
-        mBinding.button.setVisibility(View.GONE);
+
     }
 
     private fun setupRecyclerView() {
@@ -141,6 +142,9 @@ class MainActivity : AppCompatActivity(), OnClickListener {
             adapter = mAdapter
         }
 
+        mBinding.spinner.setOnTouchListener { view, motionEvent -> setup2() }
+        mBinding.spinner2.setOnTouchListener { view, motionEvent -> setup3() }
+
         val spinner: Spinner = mBinding.spinner
         val spinner2: Spinner = mBinding.spinner2
         ArrayAdapter.createFromResource(
@@ -152,7 +156,6 @@ class MainActivity : AppCompatActivity(), OnClickListener {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             // Apply the adapter to the spinner
             spinner.adapter = adapter
-
         }
         ArrayAdapter.createFromResource(
             this,
@@ -163,10 +166,10 @@ class MainActivity : AppCompatActivity(), OnClickListener {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             // Apply the adapter to the spinner
             spinner2.adapter = adapter
-
         }
 
     }
+
 
     // lo ideal seria que este producto se guarde en el vm y se pase al otro fragment
     override fun onClick(productEntity: ProductEntity) {
@@ -181,6 +184,44 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         }
     }
 
+
+    fun setup2(): Boolean {
+        val singleItems = arrayOf("Nombre", "Precio", "Ninguno")
+        var checkedItem = 0
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Elija modo de filtrado")
+            .setNeutralButton("cancelar") { dialog, which ->
+                // nada
+            }
+            .setPositiveButton("ok") { dialog, which ->
+                mAdapter.filtrar(checkedItem)
+            }
+            .setSingleChoiceItems(singleItems, checkedItem) { dialog, which ->
+                checkedItem = which
+            }
+            .show()
+        return true
+    }
+
+    fun setup3(): Boolean {
+        val singleItems = arrayOf("Limpieza", "Higiene", "Perfumeria")
+        var checkedItem = 0
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Elija modo de filtrado")
+            .setNeutralButton("cancelar") { dialog, which ->
+                // nada
+            }
+            .setPositiveButton("ok") { dialog, which ->
+                mAdapter.filtrar(checkedItem)
+            }
+            .setSingleChoiceItems(singleItems, checkedItem) { dialog, which ->
+                checkedItem = which
+            }
+            .show()
+        return true
+    }
+
+
     //Metodo complementarios
 
     private fun insertarCesta() {
@@ -189,152 +230,161 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
 
     private fun insertarProductos() {
-        val productos = listOf(
+        val productos = listOf( ProductEntity(
+            name = "Ladoure de Paris", image = "https://pngimg.com/uploads/perfume/perfume_PNG99997.png",            priceKgL = 2.0, unitPrice = 1.0, quantity = 1
+        ),
+
             ProductEntity(
-                name = "Patata",
-                image = "https://static.wikia.nocookie.net/minecraftpe/images/1/1e/New_Baked_PotatoB.png/revision/latest/scale-to-width-down/300?cb=20200615142618&path-prefix=es",
-                priceKgL = 2.0, unitPrice = 1.0, quantity = 1
-            ),
-            ProductEntity(
-                name = "Zanahoria",
-                image = "https://static.wikia.nocookie.net/minecraftpe/images/3/31/Zanahoria.png/revision/latest/scale-to-width-down/150?cb=20140429154232&path-prefix=es",
-                priceKgL = 4.0, unitPrice = 3.0, quantity = 2
-            ),
-            ProductEntity(
-                name = "Pan",
-                image = "https://static.wikia.nocookie.net/minecraftpe/images/c/ca/Pan.png/revision/latest/scale-to-width-down/150?cb=20140426181947&path-prefix=es",
+                name = "Fregona con cubo",
+                image = "https://pngimg.com/uploads/mop/mop_PNG90.png",
                 priceKgL = 3.0, unitPrice = 0.5, quantity = 1
             ),
             ProductEntity(
-                name = "Tarta",
-                image = "https://static.wikia.nocookie.net/minecraftpe/images/c/c7/Pastel.png/revision/latest/scale-to-width-down/150?cb=20200622172745&path-prefix=es",
+                name = "Desodorante Fito",
+                image = "https://pngimg.com/uploads/deodorant/deodorant_PNG71.png",
                 priceKgL = 10.0, unitPrice = 10.0, quantity = 1
             ),
-            ProductEntity(
-                name = "Amapola",
-                image = "https://static.wikia.nocookie.net/minecraftpe/images/a/a4/Amapola.png/revision/latest/scale-to-width-down/150?cb=20140525035412&path-prefix=es",
-                priceKgL = 20.0, unitPrice = 1.0, quantity = 1
-            ),
-            ProductEntity(
-                name = "Zanahoria", image = "",
-                priceKgL = 2.0, unitPrice = 1.0, quantity = 1
-            ),
-            ProductEntity(
-                name = "Tierra",
-                image = "https://static.wikia.nocookie.net/minecraftpe/images/7/7c/Tierra.png/revision/latest/scale-to-width-down/150?cb=20190923040636&path-prefix=es",
-                priceKgL = 0.1, unitPrice = 0.1, quantity = 1
-            ),
-            ProductEntity(
-                name = "Arco",
-                image = "https://static.wikia.nocookie.net/minecraftpe/images/d/db/Arco.gif/revision/latest/scale-to-width-down/150?cb=20140201200529&path-prefix=es",
-                priceKgL = 20.0, unitPrice = 40.0, quantity = 1
-            ),
-            ProductEntity(
-                name = "Reloj",
-                image = "https://static.wikia.nocookie.net/minecraftpe/images/8/83/Clock_JE2_BE1.gif/revision/latest/scale-to-width-down/160?cb=20211216235526&path-prefix=es",
-                priceKgL = 200.0, unitPrice = 200.0, quantity = 1
-            ),
+/* ProductEntity(
+     name = "Patata",
+     image = "https://static.wikia.nocookie.net/minecraftpe/images/1/1e/New_Baked_PotatoB.png/revision/latest/scale-to-width-down/300?cb=20200615142618&path-prefix=es",
+     priceKgL = 2.0, unitPrice = 1.0, quantity = 1
+ ),
+ ProductEntity(
+     name = "Zanahoria",
+     image = "https://static.wikia.nocookie.net/minecraftpe/images/3/31/Zanahoria.png/revision/latest/scale-to-width-down/150?cb=20140429154232&path-prefix=es",
+     priceKgL = 4.0, unitPrice = 3.0, quantity = 2
+ ),
+ ProductEntity(
+     name = "Pan",
+     image = "https://static.wikia.nocookie.net/minecraftpe/images/c/ca/Pan.png/revision/latest/scale-to-width-down/150?cb=20140426181947&path-prefix=es",
+     priceKgL = 3.0, unitPrice = 0.5, quantity = 1
+ ),
+ ProductEntity(
+     name = "Tarta",
+     image = "https://static.wikia.nocookie.net/minecraftpe/images/c/c7/Pastel.png/revision/latest/scale-to-width-down/150?cb=20200622172745&path-prefix=es",
+     priceKgL = 10.0, unitPrice = 10.0, quantity = 1
+ ),
+ ProductEntity(
+     name = "Amapola",
+     image = "https://static.wikia.nocookie.net/minecraftpe/images/a/a4/Amapola.png/revision/latest/scale-to-width-down/150?cb=20140525035412&path-prefix=es",
+     priceKgL = 20.0, unitPrice = 1.0, quantity = 1
+ ),
+ ProductEntity(
+     name = "Zanahoria", image = "",
+     priceKgL = 2.0, unitPrice = 1.0, quantity = 1
+ ),
+ ProductEntity(
+     name = "Tierra",
+     image = "https://static.wikia.nocookie.net/minecraftpe/images/7/7c/Tierra.png/revision/latest/scale-to-width-down/150?cb=20190923040636&path-prefix=es",
+     priceKgL = 0.1, unitPrice = 0.1, quantity = 1
+ ),
+ ProductEntity(
+     name = "Arco",
+     image = "https://static.wikia.nocookie.net/minecraftpe/images/d/db/Arco.gif/revision/latest/scale-to-width-down/150?cb=20140201200529&path-prefix=es",
+     priceKgL = 20.0, unitPrice = 40.0, quantity = 1
+ ),
+ ProductEntity(
+     name = "Reloj",
+     image = "https://static.wikia.nocookie.net/minecraftpe/images/8/83/Clock_JE2_BE1.gif/revision/latest/scale-to-width-down/160?cb=20211216235526&path-prefix=es",
+     priceKgL = 200.0, unitPrice = 200.0, quantity = 1
+ ),*/
         )
         productos.forEach { x -> mMainViewModel.insertarProducto(x) }
     }
 
 
-
-
-
-
-    /*todo avisar de que se va a borrar un producto, cuando se seleccione uno, que salga la vista de seleccion:
-        -en todos los objetos de la lista abilitar el checkbox
-        -a la hora de borrar :
-            recorrer todo el listado y borrar los seleccionados
-            crear un nuevo listado de seleccionados, problema de no saber cuando se quita un objeto de ese listado
+/*todo avisar de que se va a borrar un producto, cuando se seleccione uno, que salga la vista de seleccion:
+-en todos los objetos de la lista abilitar el checkbox
+-a la hora de borrar :
+ recorrer todo el listado y borrar los seleccionados
+ crear un nuevo listado de seleccionados, problema de no saber cuando se quita un objeto de ese listado
 
 
 private fun showFilterDialog() {
-        val filterDialog = layoutInflater.inflate(R.layout.filter_dialog_layout, null)
-        val orderCriteriaSpinner =
-            filterDialog.findViewById<Spinner>(R.id.filter_dialog_layoutorder_criteria_spinner)
-        val categoriesSpinner =
-            filterDialog.findViewById<Spinner>(R.id.filter_dialog_layoutcategories_spinner)
-        val orderByAdapter: ArrayAdapter<String> = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_spinner_dropdown_item,
-            mutableListOf("Precio", "Nombre")
-        )
-        val filterAdapter: ArrayAdapter<String> = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_spinner_dropdown_item,
-            categoriesList
-        )
-        categoriesSpinner.adapter = filterAdapter
-        orderCriteriaSpinner.adapter = orderByAdapter
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Filtrar")
-            .setView(filterDialog)
-            .setCancelable(true)
-            .setPositiveButton("Filtrar") { asidhas, qerqwer ->
-                val criteria: String = orderCriteriaSpinner.selectedItem.toString()
-                val category: String = categoriesSpinner.selectedItem.toString()
-                filterList(criteria, category)
-            }
-            .show()
-    }
+val filterDialog = layoutInflater.inflate(R.layout.filter_dialog_layout, null)
+val orderCriteriaSpinner =
+ filterDialog.findViewById<Spinner>(R.id.filter_dialog_layoutorder_criteria_spinner)
+val categoriesSpinner =
+ filterDialog.findViewById<Spinner>(R.id.filter_dialog_layoutcategories_spinner)
+val orderByAdapter: ArrayAdapter<String> = ArrayAdapter(
+ requireContext(),
+ android.R.layout.simple_spinner_dropdown_item,
+ mutableListOf("Precio", "Nombre")
+)
+val filterAdapter: ArrayAdapter<String> = ArrayAdapter(
+ requireContext(),
+ android.R.layout.simple_spinner_dropdown_item,
+ categoriesList
+)
+categoriesSpinner.adapter = filterAdapter
+orderCriteriaSpinner.adapter = orderByAdapter
+MaterialAlertDialogBuilder(requireContext())
+ .setTitle("Filtrar")
+ .setView(filterDialog)
+ .setCancelable(true)
+ .setPositiveButton("Filtrar") { asidhas, qerqwer ->
+     val criteria: String = orderCriteriaSpinner.selectedItem.toString()
+     val category: String = categoriesSpinner.selectedItem.toString()
+     filterList(criteria, category)
+ }
+ .show()
+}
 
 private fun searchByName(query: String){
-        CoroutineScope(Dispatchers.IO).launch {
-            activity?.runOnUiThread {
-                if(!query.isNullOrEmpty()){
-                    listaProductos.clear()
-                    productos.find {
-                        it.nombre.lowercase().contains(query)
-                    }?.let { listaProductos.add(it) }
-                    adapter.notifyDataSetChanged()
-                }else{
-                    listaProductos.clear()
-                    listaProductos.addAll(productos)
-                    adapter.notifyDataSetChanged()
-                }
-                hideKeyboard()
-            }
+CoroutineScope(Dispatchers.IO).launch {
+ activity?.runOnUiThread {
+     if(!query.isNullOrEmpty()){
+         listaProductos.clear()
+         productos.find {
+             it.nombre.lowercase().contains(query)
+         }?.let { listaProductos.add(it) }
+         adapter.notifyDataSetChanged()
+     }else{
+         listaProductos.clear()
+         listaProductos.addAll(productos)
+         adapter.notifyDataSetChanged()
+     }
+     hideKeyboard()
+ }
 
-        }
-    }
+}
+}
 private fun hideKeyboard(){
-        val imm = requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
-    }
+val imm = requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
+}
 
 
 
-    * */
+* */
 
 
 /*
-    override fun onDeleteProduct(productEntity: ProductEntity) {
+override fun onDeleteProduct(productEntity: ProductEntity) {
 
-        doAsync {
-            productDao.delete(productEntity)
+doAsync {
+ productDao.delete(productEntity)
 
-            uiThread {
-                mAdapter.delete(productEntity)
-            }
-        }
-    }
+ uiThread {
+     mAdapter.delete(productEntity)
+ }
+}
+}
 */
 
 
-    //insertarProductos()
+//insertarProductos()
 /*
-        mBinding.btnSave.setOnClickListener {
-            val product = ProductEntity(
-                name = mBinding.etName.text.toString().trim()) // para quitar los espacio blanco
+mBinding.btnSave.setOnClickListener {
+ val product = ProductEntity(
+     name = mBinding.etName.text.toString().trim()) // para quitar los espacio blanco
 
-            Thread {dfdfs
-                ProductAplication.database.productDao().addProduct(product)
-            }.start()
+ Thread {dfdfs
+     ProductAplication.database.productDao().addProduct(product)
+ }.start()
 
-            mAdapter.add(product)
-        }
+ mAdapter.add(product)
+}
 */
 
 

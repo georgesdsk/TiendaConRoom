@@ -15,6 +15,8 @@ import com.example.kproyectofinal.R
 import com.example.kproyectofinal.databinding.FragmentProductDetailsBinding
 import com.example.kproyectofinal.mainModule.MainActivity
 import com.google.android.material.snackbar.Snackbar
+import java.util.*
+import kotlin.random.Random.Default.nextInt
 
 
 class FragmentProductDetails : Fragment() {
@@ -58,10 +60,14 @@ class FragmentProductDetails : Fragment() {
 
 
     private fun inlfarVista(mSelectedProduct: ProductEntity) {
+        val singleItems = arrayOf("Limpieza", "Higiene", "Perfumeria")
+        val random =  Random.nextInt(0, 2)
+
         with(mBinding) {
             tvNombre.setText(mSelectedProduct.name)
-            tvPrecio.setText(mSelectedProduct.unitPrice.toString() + " €")
-            tvPrecioUnitario.setText(mSelectedProduct.priceKgL.toString() + " €")
+            tvPrecio.setText(mSelectedProduct.unitPrice.toString())
+            tvPrecioUnitario.setText(mSelectedProduct.priceKgL.toString())
+            tvCategoria.setText(singleItems[random])
             Glide.with(requireActivity())
                 .load(mSelectedProduct.image)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)

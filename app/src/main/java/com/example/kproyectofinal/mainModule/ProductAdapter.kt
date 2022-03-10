@@ -11,6 +11,7 @@ import com.example.kproyectofinal.Entidades.Cesta
 import com.example.kproyectofinal.Entidades.ProductEntity
 import com.example.kproyectofinal.R
 import com.example.kproyectofinal.databinding.ItemProductBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class ProductAdapter(
     private var productList: MutableList<ProductEntity>,
@@ -47,9 +48,33 @@ class ProductAdapter(
             binding.cbFavorite.isChecked = product.isFavorite
             binding.tvPrecio.text = product.unitPrice.toString() +"€"
         }
-
-
     }
+
+    fun filtrar(id: Int) {
+        var lista2 = productList.toMutableList()
+
+
+        when (id) {
+            0 -> {
+                productList.removeAll(lista2)
+                productList.addAll(lista2)
+
+            }
+            1 -> {
+                productList.removeAll(lista2)
+                productList.addAll(lista2.sortedBy { it.name })
+
+            }
+            2 -> {
+                productList.removeAll(lista2)
+                productList.addAll(lista2.sortedBy { it.unitPrice })
+            }
+        }
+    }
+
+
+
+
 
     override fun getItemCount(): Int = productList.size;
 

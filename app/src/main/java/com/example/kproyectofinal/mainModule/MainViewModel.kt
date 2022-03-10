@@ -97,8 +97,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         return fragment.value!!
     }
 
-     fun onCestaProduct(productEntity: ProductEntity) {
 
+     fun onCestaProduct(productEntity: ProductEntity) {
         productEntity.isFavorite = !productEntity.isFavorite;
 
          viewModelScope.launch {
@@ -106,6 +106,32 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
          }
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*

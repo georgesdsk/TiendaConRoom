@@ -80,14 +80,5 @@
         app:layout_constraintRight_toRightOf="parent"
         android:visibility="gone"/>
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginRight="@dimen/common_padding_min"
-        android:text="filtrar"
-        app:layout_constraintEnd_toEndOf="@+id/searchView"
-        app:layout_constraintTop_toTopOf="@+id/searchView" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
