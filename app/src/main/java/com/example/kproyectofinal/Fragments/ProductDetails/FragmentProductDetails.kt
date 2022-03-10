@@ -72,6 +72,7 @@ class FragmentProductDetails : Fragment() {
                 .load(mSelectedProduct.image)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
+
                 .into(mBinding.imagen)
             //
         }
